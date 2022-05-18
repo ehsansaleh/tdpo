@@ -1,0 +1,96 @@
+{
+    "a_osc_coeff": null,
+    "a_smooth_coeff": null,
+    "action_is_delta": false,
+    "action_type": "jointspace_pd",
+    "constraint_penalty": 100,
+    "contact_obs": false,
+    "do_jump": false,
+    "do_obs_noise": true,
+    "extra_obs_dim": 0,
+    "fd_velocities": false,
+    "filter_action": false,
+    "filter_action_cutoff": 100,
+    "filter_action_numtaps": 40,
+    "filter_action_window": "rectangle",
+    "filter_state": false,
+    "filter_state_cutoff": 100,
+    "filter_state_numtaps": 80,
+    "filter_state_window": "triangle",
+    "ground_contact_type": "noncompliant",
+    "hip_kD": 0.05,
+    "hip_kP": 1.25,
+    "hip_minimum_z": 0.05,
+    "inner_loop_rate": 4000,
+    "jump_fly_time": 0.2,
+    "jump_push_time": 0.2,
+    "jump_time_bounds": [
+        1.1,
+        1.6
+    ],
+    "jump_vel_coeff": 10000,
+    "jump_vel_reward": false,
+    "jumping_obs": true,
+    "knee_kD": 0.05,
+    "knee_kP": 1.25,
+    "knee_minimum_z": 0.02,
+    "max_leg_vel": 100,
+    "max_reach": 0.28,
+    "maxabs_desired_joint_angle": 10,
+    "maxabs_omega_for_tau": 33.6,
+    "maxabs_tau": 10,
+    "obs_history_taps": [
+        0
+    ],
+    "observation_delay": 0.001,
+    "omega_hip_init": [
+        -10,
+        10
+    ],
+    "omega_hip_maxabs": 100,
+    "omega_knee_init": [
+        -10,
+        10
+    ],
+    "omega_knee_maxabs": 100,
+    "omega_noise_scale": 1,
+    "outer_loop_rate": 100,
+    "output_torque_scale": 1,
+    "pos_slider_init": [
+        0.4,
+        0.8
+    ],
+    "posture_height": 0.1,
+    "slurm_job_file": "train_slurm_job.slurm",
+    "stand_reward": "dense",
+    "tau_decay_constant": 5,
+    "theta_hip_bounds": [
+        -3.9269908169872414,
+        1.5707963267948966
+    ],
+    "theta_hip_init": [
+        -3.141592653589793,
+        0.5235987755982988
+    ],
+    "theta_knee_bounds": [
+        -2.705260340591211,
+        -0.6108652381980153
+    ],
+    "theta_knee_init": [
+        -2.6179938779914944,
+        -0.6981317007977318
+    ],
+    "time_before_reset": 2,
+    "timed_jump": true,
+    "torque_delay": 0.001,
+    "torque_smoothness_coeff": 400,
+    "turn_off_constraints": false,
+    "use_motor_model": true,
+    "vel_slider_init": [
+        -0.1,
+        0.1
+    ],
+    "work_kD": 7.5,
+    "work_kP": 450,
+    "xml_file": "leg.xml"
+}
