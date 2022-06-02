@@ -204,8 +204,8 @@ def train_and_eval(setting_dict, mpi_tuple):
         env_type = 'roller' if is_env_roller else 'stepper'
         env_name = env_name_type.replace('_stepper', '')
 
-        if env_name in ('drop_leg_4k', 'drop_leg_100hz',
-                        'drop_leg_100hz_easy', 'drop_leg_100hz_easy_nc'):
+        if env_name in ('drop_leg_4k', 'drop_leg_100hz', 'drop_leg_100hz_easy', 'drop_leg_100hz_easy_nc'):
+
             opts_json_path = f'../envs/agent_interface_options.json'
             pyxml_file = f'../envs/leg.xml'
 
@@ -303,20 +303,20 @@ def train_and_eval(setting_dict, mpi_tuple):
             max_traj_steps = int(interface_options['outer_loop_rate'] *
                                  interface_options['time_before_reset'])
             act_dim = 2
-        elif env_name in ('Pendulum-v0', 'Pendulum1k-v0', 'Pendulum10k-v0'):
+        elif env_name in ('Pendulum-v0', 'Pendulum5x-v0', 'Pendulum25x-v0'):
             assert not is_env_roller
 
             from gym.envs.registration import register
-            register(id='Pendulum1k-v0',
-                     entry_point='utils.pend_envs:PendulumEnv1K',
-                     max_episode_steps=2000)
-            register(id='Pendulum10k-v0',
-                     entry_point='utils.pend_envs:PendulumEnv10K',
-                     max_episode_steps=20000)
+            register(id='Pendulum5x-v0',
+                     entry_point='utils.pendlh_envs:PendulumEnv5x',
+                     max_episode_steps=1000)
+            register(id='Pendulum25x-v0',
+                     entry_point='utils.pendlh_envs:PendulumEnv25x',
+                     max_episode_steps=5000)
 
             max_traj_steps = {'Pendulum-v0':200,
-                              'Pendulum1k-v0':2000,
-                              'Pendulum10k-v0':20000}[env_name]
+                              'Pendulum5x-v0':1000,
+                              'Pendulum25x-v0':5000}[env_name]
             act_dim = 1
             def env_maker_fn():
                 env = make_vec_env(env_name, n_envs=1)
@@ -352,7 +352,6 @@ def train_and_eval(setting_dict, mpi_tuple):
         unnecessary_wait(mpi_rank)
 
         if method in ('trpo', 'ppo1'):
-            #assert is_env_roller
             if not is_env_roller:
                 from stable_baselines.common import make_vec_env
             from stable_baselines import PPO1, TRPO
@@ -399,7 +398,6 @@ def train_and_eval(setting_dict, mpi_tuple):
         ########################################
         noise_generator = None
         if method == 'trpo':
-            #assert is_env_roller
             unnecessary_wait(mpi_rank)
             env = env_maker_fn()
             my_seed = 12345 + mpi_rank * 5 + rng_seed * 1000
@@ -412,7 +410,6 @@ def train_and_eval(setting_dict, mpi_tuple):
                          vf_batchsize=vf_batchsize, verbose=True,
                          env_type=env_type)
         elif method == 'ppo1':
-            assert is_env_roller
             unnecessary_wait(mpi_rank)
             env = env_maker_fn()
             my_seed = 12345 + mpi_rank * 5 + rng_seed * 1000
@@ -483,6 +480,8 @@ def train_and_eval(setting_dict, mpi_tuple):
             # td3paramsdict['target/pi/dense/bias:0'] *= 0.001
             # model.load_parameters(td3paramsdict)
         elif (method == 'td3'):
+            # The TD3 implementation thinks total_timesteps is serial
+            total_timesteps = total_timesteps // mpi_size
             unnecessary_wait(mpi_rank)
             env = env_maker_fn()
             my_seed = 12345 + mpi_rank * 5 + rng_seed * 1000
@@ -515,8 +514,10 @@ def train_and_eval(setting_dict, mpi_tuple):
 
             use_td3_mlp = ((activation == 'relu') and
                            (do_mlp_output_tanh == True) and
-                           (mlp_output_scaling == 10) and
+                           ((mlp_output_scaling == 10) or
+                            (mlp_output_scaling == 'auto')) and
                            (h1 == 64) and (h2==64))
+
             if use_td3_mlp:
                 TD3PolicyClass = TD3MlpPolicy
             else:
