@@ -2,17 +2,17 @@
 set -e
 
 # slurm-related variables
-nodes=15                                  # Run all processes on a single node
-ntaskspernode=8                           # Number of available threads in a job
-mpiworkers=4                              # Number of MPI ranks (<= ntaskspernode)
+nodes=4                                   # Run all processes on a single node
+ntaskspernode=36                          # Number of available threads in a job
+mpiworkers=24                             # Number of MPI ranks (<= ntaskspernode)
 time=72:00:00                             # Time limit hrs:min:sec
 partition="west"                          # The submission queue
-TIMEOUTVAL="2.5h"
+TIMEOUTVAL="12h"
 slurmemail="ehsans2@illinois.edu"
 
 # HPO specification
-HPOITERSARR=($(seq 24 24))
-CFGTREE="3_lfhpo_west/1_td3_optuna"
+HPOITERSARR=($(seq 0 10))
+CFGTREE="4_hpo5b_eng/1_ppo1_optuna"
 
 SCRIPTDIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 source $SCRIPTDIR/../.env.sh
@@ -31,7 +31,7 @@ popd () {
 for HPOITER in "${HPOITERSARR[@]}"; do
   HPOCFGTREEID="${CFGTREE}/hpo"
   MYCFGPREFIX="${CFGTREE}/round_${HPOITER}"
-  [[ $HPOCFGTREEID == *skopt* ]] && MPICMD="" || MPICMD="mpirun -n 20"
+  [[ $HPOCFGTREEID == *skopt* ]] && MPICMD="" || MPICMD="mpirun -n 36"
   echo "Bash: HPO iteration $HPOITER"
   pushd ../usr
   PYTHONHASHSEED=0 $MPICMD python hpo.py -c $HPOCFGTREEID
