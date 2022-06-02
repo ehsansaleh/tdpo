@@ -12,11 +12,7 @@ To show the practicality of our approach, we tested the TDPO agents on hardware 
 
 Here is a one minute physical test demo of the TDPO agent performing drop-and-catch tests on this leg at 4kHz frequency, and smoothly recovering from 70 cm drops:
 
-
-
-https://user-images.githubusercontent.com/28830570/171543989-ce40e5ad-4827-4a5d-a053-0de6861583a2.mp4
-
-
+https://user-images.githubusercontent.com/28830570/171757987-a9eb09d6-37c8-4592-8267-4033ed41522f.mp4
 
 ## Training Details
 
