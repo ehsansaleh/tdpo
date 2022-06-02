@@ -28,6 +28,9 @@ a = [('1_ovat500m_west/1_ppo2_1s','ovat500m', 'ppo2'),
      ('2_ovat5b_eng/2_trpo','ovat5b', 'trpo'),
      ('2_ovat5b_eng/2_ppo1','ovat5b', 'ppo1'),
      ('2_ovat5b_eng/2_ppo2','ovat5b', 'ppo2'),
+     ('5_nonleg_west/0_pendlh/pend*_trpo','pendlh', 'trpo'),
+     ('5_nonleg_west/0_pendlh/pend*_ppo1','pendlh', 'ppo1'),
+     ('5_nonleg_west/0_pendlh/pend*_td3','pendlh', 'td3'),
     ]
 
 extra_tups_json = f'{PROJPATH}/configs/expnames.json'
@@ -148,8 +151,10 @@ td3_tcols = ['TimestepsSoFar', 'time_elapsed', 'n_updates']
 
 td3_renames = {'total timesteps': 'TimestepsSoFar',
                'mean last 100 episodes reward': '100ep_rewmean',
+               'mean 100 episode reward': '100ep_rewmean',
                'eplenmean': 'EpLenMean',
                'total episodes': 'EpisodesSoFar',
+               'episodes': 'EpisodesSoFar',
                'ep_rewmean': 'All_ep_rewmean'}
 
 ##################################
