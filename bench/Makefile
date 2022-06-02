@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 PROJBASE := $(shell dirname $(abspath $(lastword $(MAKEFILE_LIST))))
-MPIPRECMD := mpirun -n 2 --oversubscribe
+MPIPRECMD := mpirun -n 36 --oversubscribe
 
 .PHONY: summary
 
@@ -27,6 +27,6 @@ clean:
 		  echo mkdir -p trash/${TODAYDATE}/$${dirkind}; \
 		  mkdir -p trash/${TODAYDATE}/$${dirkind}; \
 			echo mv $${dirkind}/$(CFGTREE) trash/${TODAYDATE}/$${dirkind}; \
-			mv results/$(CFGTREE) trash/${TODAYDATE}/$${dirkind}; \
+			mv $${dirkind}/$(CFGTREE) trash/${TODAYDATE}/$${dirkind}; \
 		fi; \
 	done
